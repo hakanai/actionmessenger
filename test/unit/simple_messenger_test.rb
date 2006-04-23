@@ -3,8 +3,7 @@ require 'simple_messenger'
 
 class SimpleMessengerTest < Test::Unit::TestCase
   def setup
-    @mock_messenger = ActionMessenger::MockMessenger.new
-    ActionMessenger::Messenger.register('default', @mock_messenger)
+    @mock_messenger = ActionMessenger::Messenger.find_by_name(RAILS_ENV)
     @expected = ActionMessenger::Message.new
   end
   

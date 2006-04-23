@@ -9,7 +9,9 @@ module ActionMessenger
     # If set to nil, or if the messenger lookup returns nil, the message won't be sent,
     # which may be useful if you need a simple way to temporarily disable messaging.
     #
-    # The default messenger is the messenger named 'default' in the configuration.
+    # The default messenger is retrieved from the configuration, by looking up the
+    # name of the current Rails environment.  If running outside of Rails, 'default'
+    # is used as the default.
     attr_accessor :messenger
     
     # The default messenger to use.
@@ -32,12 +34,12 @@ module ActionMessenger
       initialize_defaults
       send(method_name, *parameters)
       
-      # TODO: Templating, ActionMailer-style.
+      # TODO: Templates, ActionMailer-style.
     end
     
     # Initialises default settings for this messenger.
     def initialize_defaults
-      @messenger = @@default_messenger || 'default'
+      @messenger = @@default_messenger || RAILS_ENV || 'default'
       @message = Message.new
     end
     

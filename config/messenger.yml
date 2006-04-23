@@ -1,0 +1,9 @@
+
+development:
+    type: xmpp4r
+    jid: guest@trypticon.org
+    password: ............
+
+test:
+    type: mock
+

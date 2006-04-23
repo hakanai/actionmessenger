@@ -11,41 +11,10 @@ module ActionMessenger
     # The YAML configuration file where config will be loaded from.
     cattr_accessor :config_file
     
-    # Creates a new messenger from its config hash.
-    #
-    # Hash can contain:
-    #    jid:      the Jabber ID of this messenger, with resource if you wish.
-    #    password: the password for this messenger.
-    def initialize(config_hash = {})
-      @listeners = []
-      
-      # Sanity check the JID to ensure it has a resource, and add one ourselves if it doesn't.
-      jid = config_hash['jid']
-      jid += '/ActionMessenger' unless jid =~ /\//
-      
-      # TODO: Different strategies for staying online (come online only to send messages.)
-      # TODO: Reconnection strategy.
-      # TODO: Multiple mechanisms for sending messages, for Jabber backend swap-out,
-      #       but also to unit test the sending code.
-      @client = Jabber::Client.new(Jabber::JID.new(jid))
-      
-      @client.connect
-      @client.auth(config_hash['password'])
-    end
-    
-    # Sends a message.
-    def send_message(message)
-      to = message.to
-      to = Jabber::JID.new(to) unless to.is_a?(Jabber::JID)
-      jabber_message = Jabber::Message.new(to, message.body)
-      jabber_message.subject = message.subject
-      @client.send(jabber_message)
-    end
-    
     # Gets the messenger config, potentially loading it from the file.
     def self.config
       unless defined?(@@config)
-        config_file = @@config_file || (RAILS_ROOT + "/config/messengers.yml")
+        config_file = @@config_file || (RAILS_ROOT + "/config/messenger.yml")
         @@config = YAML.load_file(config_file)
       end
     end
@@ -57,11 +26,20 @@ module ActionMessenger
       @@messengers[name] = messenger
     end
     
+    def self.create_from_config(config_hash)
+      case config_hash['type']
+        when 'mock'   then messenger = Messengers::MockMessenger.new
+        when 'xmpp4r' then messenger = Messengers::Xmpp4rMessenger.new(config_hash)
+        else raise ArgumentError, "Unknown messenger type: #{config_hash['type']}"
+      end
+      messenger
+    end
+    
     # Finds a messenger by its name.
     def self.find_by_name(name)
       messenger = @@messengers[name]
       if messenger.nil?
-        @@messengers[name] = Messenger.new(config[name])
+        @@messengers[name] = messenger = self.create_from_config(config[name])
       end
       messenger
     end
