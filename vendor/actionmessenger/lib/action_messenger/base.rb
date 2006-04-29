@@ -1,4 +1,3 @@
-
 module ActionMessenger
   class Base
     # The message being built, to later be sent.
@@ -14,15 +13,17 @@ module ActionMessenger
     # is used as the default.
     attr_accessor :messenger
     
-    # The default messenger to use.
-    cattr_accessor :default_messenger
-    
     class << self
       def method_missing(method_symbol, *parameters)
         case method_symbol.id2name
         when /^create_([_a-z]\w*)/ then new($1, *parameters).message
         when /^send_([_a-z]\w*)/   then new($1, *parameters).send_message
         end
+      end
+      
+      # Sets the messenger to use for this class.
+      def uses_messenger(messenger)
+        @@default_messenger = messenger
       end
     end
     
@@ -46,7 +47,7 @@ module ActionMessenger
     # Sends the message
     def send_message(message = @message, messenger = @messenger)
       unless messenger.nil?
-        messenger = Messenger.find_by_name(messenger.to_s)
+        messenger = Messenger.resolve(messenger)
         unless messenger.nil?
           messenger.send_message(message)
         end

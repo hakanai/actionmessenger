@@ -1,47 +1,28 @@
-require 'xmpp4r'
-
 module ActionMessenger
   
   # Represents a single instant messenger.
   #
-  # The static methods can be used to access a repository of multiple messengers
-  # loaded from a YAML config file.
+  # TODO: See what utilities we can move into here, common to all messengers.
   class Messenger
     
-    # The YAML configuration file where config will be loaded from.
-    cattr_accessor :config_file
+    # The configuration used to load this messenger.
+    attr_reader :config
     
-    # Gets the messenger config, potentially loading it from the file.
-    def self.config
-      unless defined?(@@config)
-        config_file = @@config_file || (RAILS_ROOT + "/config/messenger.yml")
-        @@config = YAML.load_file(config_file)
-      end
+    # Initialises the messenger.  At the moment this class doesn't do anything with the config
+    # except store it into an attribute.
+    def initialize(config_hash = {})
+      @config = config_hash
     end
     
-    @@messengers = {}
-    
-    # Registers a messenger by name.  This will probably only be used from unit tests.
-    def self.register(name, messenger)
-      @@messengers[name] = messenger
-    end
-    
-    def self.create_from_config(config_hash)
-      case config_hash['type']
-        when 'mock'   then messenger = Messengers::MockMessenger.new
-        when 'xmpp4r' then messenger = Messengers::Xmpp4rMessenger.new(config_hash)
-        else raise ArgumentError, "Unknown messenger type: #{config_hash['type']}"
+    # Resolves any object into a Messenger.  If the object itself is a Messenger,
+    # the object itself is returned.  Otherwise, it is converted to a string and that
+    # string is used to look it up in the registry.
+    def self.resolve(messenger)
+      if messenger.is_a?(Messenger)
+        messenger
+      else
+        MessengerRegistry.find_by_name(messenger.to_s)
       end
-      messenger
-    end
-    
-    # Finds a messenger by its name.
-    def self.find_by_name(name)
-      messenger = @@messengers[name]
-      if messenger.nil?
-        @@messengers[name] = messenger = self.create_from_config(config[name])
-      end
-      messenger
     end
   end
 end

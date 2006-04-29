@@ -1,0 +1,11 @@
+
+mock:
+    type: mock
+
+invalid-type:
+    type: illegal
+
+real:
+    type: xmpp4r
+    jid: guest@trypticon.org/tests
+    password: ............
