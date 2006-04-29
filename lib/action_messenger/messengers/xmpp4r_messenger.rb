@@ -1,12 +1,13 @@
 module ActionMessenger
   module Messengers
-    class Xmpp4rMessenger < Messenger
+    class Xmpp4rMessenger < ActionMessenger::Messenger
       # Creates a new messenger from its config hash.
       #
       # Hash can contain:
       #    jid:      the Jabber ID of this messenger, with resource if you wish.
       #    password: the password for this messenger.
       def initialize(config_hash = {})
+        super(config_hash)
         @listeners = []
       
         # Sanity check the JID to ensure it has a resource, and add one ourselves if it doesn't.
@@ -30,6 +31,14 @@ module ActionMessenger
         jabber_message = Jabber::Message.new(to, message.body)
         jabber_message.subject = message.subject
         @client.send(jabber_message)
+      end
+      
+      # TODO: See if there is a way to have this called on exit, for a more friendly shutdown.
+      def shutdown
+        unless @client.nil?
+          @client.close
+          @client = nil
+        end
       end
     end
   end
