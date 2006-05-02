@@ -25,6 +25,14 @@ module ActionMessenger
       def uses_messenger(messenger)
         @@default_messenger = messenger
       end
+      
+      # Registers to receive messages.
+      # When a new message comes in, it will be sent to the instance method called 'received'.
+      def receives_messages
+        Messenger.resolve(@@default_messenger).add_message_handler do |message|
+          new.received(message)
+        end
+      end
     end
     
     def initialize(method_name = nil, *parameters)
@@ -40,7 +48,7 @@ module ActionMessenger
     
     # Initialises default settings for this messenger.
     def initialize_defaults
-      @messenger = @@default_messenger || RAILS_ENV || 'default'
+      @messenger = @@default_messenger || 'default'
       @message = Message.new
     end
     

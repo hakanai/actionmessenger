@@ -1,4 +1,3 @@
-
 # Tests for the messenger registry.
 class RegistryTest < Test::Unit::TestCase
   def setup

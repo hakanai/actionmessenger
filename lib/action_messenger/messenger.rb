@@ -12,6 +12,19 @@ module ActionMessenger
     # except store it into an attribute.
     def initialize(config_hash = {})
       @config = config_hash
+      @message_handlers = []
+    end
+    
+    # Adds a message handler which will be called for any incoming messages.
+    def add_message_handler(&block)
+      @message_handlers << block
+    end
+    
+    # Called by subclasses when a message is received.
+    def message_received(message)
+      @message_handlers.each do |block|
+        block.call(message)
+      end
     end
     
     # Resolves any object into a Messenger.  If the object itself is a Messenger,

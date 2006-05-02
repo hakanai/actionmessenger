@@ -22,6 +22,15 @@ module ActionMessenger
       
         @client.connect
         @client.auth(config_hash['password'])
+        
+        @client.add_message_callback do |jabber_message|
+          message = ActionMessenger::Message.new
+          message.to = jabber_message.to.to_s
+          message.from = jabber_message.from.to_s
+          message.body = jabber_message.body
+          message.subject = jabber_message.subject
+          message_received(message)
+        end
       end
     
       # Sends a message.

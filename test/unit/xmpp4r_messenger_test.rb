@@ -12,15 +12,25 @@ class Xmpp4rMessengerTest < Test::Unit::TestCase
   end
   
   # Tests sending a message (to ourselves.)
-  def test_send
+  def test_send_receive
     message = ActionMessenger::Message.new
     message.to = @messenger.config['jid']
     message.body = 'Test body'
     message.subject = 'Test subject'
-    @messenger.send_message(message)
     
-    # TODO: Confirm receipt of the same message.
+    received = nil
+    @messenger.add_message_handler do |message|
+      received = message
+    end
+    
+    # Send the message.
+    @messenger.send_message(message)
     sleep(0.5)
+    
+    # Confirm receipt of the same message.
+    expected = message.clone
+    expected.from = @messenger.config['jid']
+    assert_equal expected, received
   end
 
   # Dummy messenger for the sake of testing resolving something that's already a messenger.

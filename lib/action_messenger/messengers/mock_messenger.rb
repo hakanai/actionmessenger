@@ -8,13 +8,21 @@ module ActionMessenger
       attr_accessor :deliveries
     
       def initialize
+        super
         @deliveries = []
       end
     
+      # Sends a message.  Really just adds it to the delivery list, for unit testing.
       def send_message(message)
         @deliveries << message
       end
       
+      # Fakes a message being received, for unit testing.
+      def fake_received(message)
+        message_received(message)
+      end
+    
+      # Shuts down (by doing nothing.)
       def shutdown
       end
     end

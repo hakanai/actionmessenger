@@ -16,6 +16,7 @@ module ActionMessenger
 
     # Definition of equality is when all the above attributes are identical.
     def ==(that)
+      return false if that.nil?
       to == that.to and from == that.from and body == that.body and subject == that.subject
     end
   end
