@@ -14,7 +14,10 @@ module ActionMessenger
     # The subject of the message.
     attr_accessor :subject
 
-    # Definition of equality is when all the above attributes are identical.
+    # Compares this object with another for equality.
+    #
+    # The other object is considered equal if it is not <code>nil</code> and all its fields
+    # are the same as this object's fields.
     def ==(that)
       return false if that.nil?
       to == that.to and from == that.from and body == that.body and subject == that.subject

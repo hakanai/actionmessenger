@@ -28,7 +28,7 @@ module ActionMessenger
     # Trickery... we'll make unknown static method calls redirect to a shared instance.
     class << self
       @shared_instance = nil
-      def method_missing(method, *params, &block)
+      def method_missing(method, *params, &block) #:nodoc:
         if @shared_instance.nil?
           @shared_instance = MessengerRegistry.new
         end
@@ -39,6 +39,7 @@ module ActionMessenger
       attr_accessor :shared_instance
     end
     
+    # Constructs a new registry.
     def initialize
       @config_file = if defined?(RAILS_ROOT)
                        RAILS_ROOT + "/config/messenger.yml"

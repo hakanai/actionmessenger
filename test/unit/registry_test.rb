@@ -1,3 +1,6 @@
+$:.unshift(File.dirname(__FILE__) + "/../")
+require 'common'
+
 # Tests for the messenger registry.
 class RegistryTest < Test::Unit::TestCase
   def setup

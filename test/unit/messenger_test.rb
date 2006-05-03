@@ -1,3 +1,5 @@
+$:.unshift(File.dirname(__FILE__) + "/../")
+require 'common'
 
 # Tests for the messenger.
 class MessengerTest < Test::Unit::TestCase

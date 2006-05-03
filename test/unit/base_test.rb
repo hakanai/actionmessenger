@@ -1,4 +1,5 @@
-$:.unshift(File.dirname(__FILE__) + "/../../lib/")
+$:.unshift(File.dirname(__FILE__) + "/../")
+require 'common'
 
 class BaseTest < Test::Unit::TestCase
   def setup

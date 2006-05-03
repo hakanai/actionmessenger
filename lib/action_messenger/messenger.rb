@@ -1,8 +1,6 @@
 module ActionMessenger
   
   # Represents a single instant messenger.
-  #
-  # TODO: See what utilities we can move into here, common to all messengers.
   class Messenger
     
     # The configuration used to load this messenger.
@@ -36,6 +34,13 @@ module ActionMessenger
       else
         MessengerRegistry.find_by_name(messenger.to_s)
       end
+    end
+
+    # Shuts down this messenger.
+    #
+    # This implementation does nothing and is here for the convenience of subclasses that
+    # don't need special shutdown code.
+    def shutdown
     end
   end
 end

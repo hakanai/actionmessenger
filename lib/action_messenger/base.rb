@@ -14,7 +14,7 @@ module ActionMessenger
     attr_accessor :messenger
     
     class << self
-      def method_missing(method_symbol, *parameters)
+      def method_missing(method_symbol, *parameters) #:nodoc:
         case method_symbol.id2name
         when /^create_([_a-z]\w*)/ then new($1, *parameters).message
         when /^send_([_a-z]\w*)/   then new($1, *parameters).send_message
@@ -35,11 +35,11 @@ module ActionMessenger
       end
     end
     
-    def initialize(method_name = nil, *parameters)
+    def initialize(method_name = nil, *parameters) #:nodoc:
       create!(method_name, *parameters) if method_name
     end
     
-    def create!(method_name, *parameters)
+    def create!(method_name, *parameters) #:nodoc:
       initialize_defaults
       send(method_name, *parameters)
       
@@ -52,7 +52,7 @@ module ActionMessenger
       @message = Message.new
     end
     
-    # Sends the message
+    # Sends a message
     def send_message(message = @message, messenger = @messenger)
       unless messenger.nil?
         messenger = Messenger.resolve(messenger)

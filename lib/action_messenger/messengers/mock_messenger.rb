@@ -7,6 +7,7 @@ module ActionMessenger
       # The list of deliveries.
       attr_accessor :deliveries
     
+      # Constructs the mock messenger.
       def initialize
         super
         @deliveries = []
@@ -20,10 +21,6 @@ module ActionMessenger
       # Fakes a message being received, for unit testing.
       def fake_received(message)
         message_received(message)
-      end
-    
-      # Shuts down (by doing nothing.)
-      def shutdown
       end
     end
   end

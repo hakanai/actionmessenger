@@ -1,3 +1,6 @@
+$:.unshift(File.dirname(__FILE__) + "/../")
+require 'common'
+
 # Tests for the XMPP4R messenger.
 class Xmpp4rMessengerTest < Test::Unit::TestCase
   def setup
