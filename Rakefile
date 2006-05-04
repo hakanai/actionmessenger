@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'rake'
+require 'rake/clean'
 require 'rake/testtask'
 require 'rake/rdoctask'
 require 'rake/gempackagetask'
@@ -9,9 +10,6 @@ PKG_NAME    = "actionmessenger"
 PKG_VERSION = ActionMessenger::VERSION::STRING
 
 task :default => [ :test ]
-
-# Cleans generated files
-# TODO: clean task
 
 # Runs the unit tests
 Rake::TestTask.new do |t|
