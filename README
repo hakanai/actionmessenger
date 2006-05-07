@@ -1,0 +1,77 @@
+= Action Messenger -- Instant Messaging made simple
+
+Action Messenger is a framework for designing and testing application
+components which both send and receive instant messages.  It was heavily
+based on Action Mailer which does the same thing for email.
+
+== Configuring the messenger
+
+Configuration of messengers works in a similar fashion to configuration of
+databases in Active Record.
+
+The simplest configuration is to use a single messenger.
+
+default:
+    type: xmpp4r
+    jid: user@example.com/resource
+    password: secret
+
+Multiple messengers can be defined in this fashion, however most applications
+should only need one, and by default the messenger named 'default' is the one
+which is used.
+
+== Sending messages
+
+The following is the simplest example of a class able to send a message:
+
+    class AlarmClock < ActionMessenger::Base
+      def wake_up(user)
+        message.to = user
+        message.body = 'Wake up!'
+      end
+    end
+
+As with Action Mailer, sending or creating a message does not involve
+calling your method directly:
+
+  AlarmClock.create_wake_up("someone@example.com") # => Message object for unit tests
+  AlarmClock.send_wake_up("someone@example.com")   # sends the message
+
+== Receiving messages
+
+To receive messages, implement a public instance method called receive that
+takes an ActionMessenger::Message object as its single parameter.  They also
+need to register to receive messages by calling receives_messages on the class.
+
+A simple example:
+
+  class MessageLogger < ActionMessenger::Base
+    receives_messages
+
+    def receive(message)
+      MessageLogEntry.create(:sender => message.from
+                             :body   => message.body)
+    end
+  end
+
+== Dependencies
+
+At present, the only dependency is XMPP4R, and this dependency is currently included in
+this bundle.  XMPP4R is licenced under the Ruby licence; a copy of this licence can be
+found in vendor/xmpp4r/LICENSE.
+
+== License
+
+Action Messenger is released under the MIT license.  A copy of this licence can be
+found in the file named COPYING.
+
+== Support
+
+The homepage is currently at: http://trypticon.org/software/actionmessenger/
+
+Contact details can be found at the homepage.
+
+Action Messenger is currently extremely experimental software, and there is no
+guarantee that it will be stable in the near future.  However, if people do find
+bugs I will endeavour to fix them, and I am accepting feature requests that
+aren't already listed on the homepage.

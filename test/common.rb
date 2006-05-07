@@ -6,4 +6,3 @@ require 'action_messenger'
 
 # Override the configuration...
 ActionMessenger::MessengerRegistry.config_file = File.dirname(__FILE__) + "/files/test-config.yml"
-
