@@ -7,5 +7,5 @@ invalid-type:
 
 real:
     type: xmpp4r
-    jid: guest@trypticon.org/tests
-    password: ............
+    jid: guest@localhost/tests
+    password: guest
