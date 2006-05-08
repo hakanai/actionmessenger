@@ -4,10 +4,12 @@ require 'rake/clean'
 require 'rake/testtask'
 require 'rake/rdoctask'
 require 'rake/gempackagetask'
+require 'rake/contrib/sshpublisher'
 require File.dirname(__FILE__) + '/lib/action_messenger/version'
 
-PKG_NAME    = 'actionmessenger'
-PKG_VERSION = ActionMessenger::VERSION::STRING
+PKG_NAME      = 'actionmessenger'
+PKG_VERSION   = ActionMessenger::VERSION::STRING
+PKG_FILE_NAME = "#{PKG_NAME}-#{PKG_VERSION}"
 
 task :default => [ :test ]
 
@@ -58,3 +60,13 @@ Rake::GemPackageTask.new(spec) do |package|
   package.gem_spec = spec
 end
 
+desc "Publish the gem and anything else that has to go to the web site."
+task :publish => [:package, :rdoc] do
+  userhost = 'trejkaz@trypticon.org'
+  remotedir = 'wwwroot/branches/software/actionmessenger'
+  Rake::SshFilePublisher.new(userhost, remotedir, 'pkg', "#{PKG_FILE_NAME}.gem").upload
+  Rake::SshDirPublisher.new(userhost, remotedir + '/doc', 'doc').upload
+  Rake::SshFilePublisher.new(userhost, remotedir + '/doc', 'data/webfiles', '.htaccess').upload
+  Rake::SshDirPublisher.new(userhost, remotedir + '/coverage', 'coverage').upload
+  Rake::SshFilePublisher.new(userhost, remotedir + '/coverage', 'data/webfiles', '.htaccess').upload
+end

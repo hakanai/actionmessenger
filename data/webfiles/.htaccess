@@ -1,0 +1,4 @@
+AddType text/html .html .htm
+php_value auto_prepend_file none
+php_value auto_append_file none
+
