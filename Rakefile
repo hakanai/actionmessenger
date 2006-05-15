@@ -74,16 +74,22 @@ Rake::GemPackageTask.new(spec) do |package|
   package.need_tar = true
 end
 
-desc "Publich the rdoc documentation"
+desc "Publish the rdoc documentation"
 task :publish_rdoc => [:rdoc] do
   Rake::SshDirPublisher.new(PUBLISH_LOGIN, PUBLISH_DIR + '/doc', 'doc').upload
   Rake::SshFilePublisher.new(PUBLISH_LOGIN, PUBLISH_DIR + '/doc', 'data/webfiles', '.htaccess').upload
 end
 
-desc "Publish the gem and anything else that has to go to the web site."
-task :publish => [:package, :rdoc] do
+desc "Publish the software packages"
+task :publish_package => [:package] do
   Rake::SshFilePublisher.new(PUBLISH_LOGIN, PUBLISH_DIR, 'pkg', "#{PKG_FILE_NAME}.gem").upload
   Rake::SshFilePublisher.new(PUBLISH_LOGIN, PUBLISH_DIR, 'pkg', "#{PKG_FILE_NAME}.tgz").upload
+end
+
+desc "Publish the coverage reports"
+task :publish_coverage => [:coverage] do
   Rake::SshDirPublisher.new(PUBLISH_LOGIN, PUBLISH_DIR + '/coverage', 'coverage').upload
   Rake::SshFilePublisher.new(PUBLISH_LOGIN, PUBLISH_DIR + '/coverage', 'data/webfiles', '.htaccess').upload
 end
+
+task :publish => [:publish_rdoc, :publish_package]
