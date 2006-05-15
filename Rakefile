@@ -27,7 +27,7 @@ Rake::RDocTask.new { |rdoc|
   rdoc.title    = 'Action Messenger -- instant messaging made simple'
   rdoc.options << '--line-numbers' << '--inline-source' << '-A cattr_accessor=object'
   rdoc.template = "#{ENV['template']}.rb" if ENV['template']
-  rdoc.rdoc_files.include('README', 'COPYING')
+  rdoc.rdoc_files.include('README', 'CHANGES', 'COPYING')
   rdoc.rdoc_files.include('lib/action_messenger.rb')
   rdoc.rdoc_files.include('lib/action_messenger/**/*.rb')
 }
@@ -51,7 +51,7 @@ spec = Gem::Specification.new do |spec|
 
   svnfiles = proc { |item| item.include?('\.svn') }
 
-  spec.files = [ 'README', 'COPYING', 'Rakefile' ] +
+  spec.files = [ 'README', 'CHANGES', 'COPYING', 'Rakefile' ] +
                ( Dir.glob('lib/**/*') +
                  Dir.glob('test/**/*') +
                  Dir.glob('vendor/**/*') ).delete_if { |item| item.include?('\.svn') }
