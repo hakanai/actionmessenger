@@ -37,7 +37,7 @@ Rake::RDocTask.new do |rdoc|
   rdoc.title    = 'Action Messenger -- instant messaging made simple'
   rdoc.options << '--line-numbers' << '--inline-source' << '-A cattr_accessor=object'
   rdoc.template = "#{ENV['template']}.rb" if ENV['template']
-  rdoc.rdoc_files.include('README', 'COPYING')
+  rdoc.rdoc_files.include('README', 'CHANGES', 'COPYING')
   rdoc.rdoc_files.include('lib/action_messenger.rb')
   rdoc.rdoc_files.include('lib/action_messenger/**/*.rb')
 end
@@ -61,13 +61,14 @@ spec = Gem::Specification.new do |spec|
 
   svnfiles = proc { |item| item.include?('\.svn') }
 
-  spec.files = [ 'README', 'COPYING', 'Rakefile' ] +
+  spec.files = [ 'README', 'CHANGES', 'COPYING', 'Rakefile' ] +
                ( Dir.glob('lib/**/*') +
                  Dir.glob('test/**/*') +
                  Dir.glob('vendor/**/*') ).delete_if { |item| item.include?('\.svn') }
 end
 Rake::GemPackageTask.new(spec) do |package|
   package.gem_spec = spec
+  package.need_tar = true
 end
 
 desc "Publish the gem and anything else that has to go to the web site."
@@ -75,6 +76,7 @@ task :publish => [:package, :rdoc] do
   userhost = 'trejkaz@trypticon.org'
   remotedir = 'wwwroot/branches/software/actionmessenger'
   Rake::SshFilePublisher.new(userhost, remotedir, 'pkg', "#{PKG_FILE_NAME}.gem").upload
+  Rake::SshFilePublisher.new(userhost, remotedir, 'pkg', "#{PKG_FILE_NAME}.tgz").upload
   Rake::SshDirPublisher.new(userhost, remotedir + '/doc', 'doc').upload
   Rake::SshFilePublisher.new(userhost, remotedir + '/doc', 'data/webfiles', '.htaccess').upload
   Rake::SshDirPublisher.new(userhost, remotedir + '/coverage', 'coverage').upload
