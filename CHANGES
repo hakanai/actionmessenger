@@ -1,0 +1,7 @@
+CHANGELOG
+
+Version 0.1.1:
+    - Fixed a glitch that caused mock mode to be permanently engaged while inside Rails.
+    - Fixed initialisation of the default messenger so that subclasses of ActionMessenger::Base
+      don't have to declare uses_messenger.
+
