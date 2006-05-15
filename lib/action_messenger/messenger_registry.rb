@@ -49,7 +49,7 @@ module ActionMessenger
                      
       @config = nil
       @messengers = {}
-      @mock_messengers = defined?(RAILS_ENV) and RAILS_ENV == 'test'
+      @mock_messengers = (defined?(RAILS_ENV) and RAILS_ENV == 'test')
     end
     
     # Gets the messenger config.
