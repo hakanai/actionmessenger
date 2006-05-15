@@ -11,10 +11,10 @@ databases in Active Record.
 
 The simplest configuration is to use a single messenger.
 
-default:
-    type: xmpp4r
-    jid: user@example.com/resource
-    password: secret
+ default:
+   type: xmpp4r
+   jid: user@example.com/resource
+   password: secret
 
 Multiple messengers can be defined in this fashion, however most applications
 should only need one, and by default the messenger named 'default' is the one
@@ -24,12 +24,12 @@ which is used.
 
 The following is the simplest example of a class able to send a message:
 
-    class AlarmClock < ActionMessenger::Base
-      def wake_up(user)
-        message.to = user
-        message.body = 'Wake up!'
-      end
+  class AlarmClock < ActionMessenger::Base
+    def wake_up(user)
+      message.to = user
+      message.body = 'Wake up!'
     end
+  end
 
 As with Action Mailer, sending or creating a message does not involve
 calling your method directly:
