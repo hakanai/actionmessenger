@@ -21,6 +21,8 @@ module ActionMessenger
         end
       end
       
+      @@default_messenger = 'default'
+
       # Sets the messenger to use for this class.
       def uses_messenger(messenger)
         @@default_messenger = messenger
@@ -48,7 +50,7 @@ module ActionMessenger
     
     # Initialises default settings for this messenger.
     def initialize_defaults
-      @messenger = @@default_messenger || 'default'
+      @messenger = @@default_messenger
       @message = Message.new
     end
     
