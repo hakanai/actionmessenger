@@ -11,6 +11,9 @@ PKG_NAME      = 'actionmessenger'
 PKG_VERSION   = ActionMessenger::VERSION::STRING
 PKG_FILE_NAME = "#{PKG_NAME}-#{PKG_VERSION}"
 
+PUBLISH_LOGIN = 'trejkaz@trypticon.org'
+PUBLISH_DIR = 'wwwroot/branches/software/actionmessenger'
+
 task :default => [ :test ]
 
 # Runs the unit tests
@@ -71,14 +74,16 @@ Rake::GemPackageTask.new(spec) do |package|
   package.need_tar = true
 end
 
+desc "Publich the rdoc documentation"
+task :publish_rdoc => [:rdoc] do
+  Rake::SshDirPublisher.new(PUBLISH_LOGIN, PUBLISH_DIR + '/doc', 'doc').upload
+  Rake::SshFilePublisher.new(PUBLISH_LOGIN, PUBLISH_DIR + '/doc', 'data/webfiles', '.htaccess').upload
+end
+
 desc "Publish the gem and anything else that has to go to the web site."
 task :publish => [:package, :rdoc] do
-  userhost = 'trejkaz@trypticon.org'
-  remotedir = 'wwwroot/branches/software/actionmessenger'
-  Rake::SshFilePublisher.new(userhost, remotedir, 'pkg', "#{PKG_FILE_NAME}.gem").upload
-  Rake::SshFilePublisher.new(userhost, remotedir, 'pkg', "#{PKG_FILE_NAME}.tgz").upload
-  Rake::SshDirPublisher.new(userhost, remotedir + '/doc', 'doc').upload
-  Rake::SshFilePublisher.new(userhost, remotedir + '/doc', 'data/webfiles', '.htaccess').upload
-  Rake::SshDirPublisher.new(userhost, remotedir + '/coverage', 'coverage').upload
-  Rake::SshFilePublisher.new(userhost, remotedir + '/coverage', 'data/webfiles', '.htaccess').upload
+  Rake::SshFilePublisher.new(PUBLISH_LOGIN, PUBLISH_DIR, 'pkg', "#{PKG_FILE_NAME}.gem").upload
+  Rake::SshFilePublisher.new(PUBLISH_LOGIN, PUBLISH_DIR, 'pkg', "#{PKG_FILE_NAME}.tgz").upload
+  Rake::SshDirPublisher.new(PUBLISH_LOGIN, PUBLISH_DIR + '/coverage', 'coverage').upload
+  Rake::SshFilePublisher.new(PUBLISH_LOGIN, PUBLISH_DIR + '/coverage', 'data/webfiles', '.htaccess').upload
 end
