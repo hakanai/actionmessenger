@@ -21,8 +21,18 @@ Rake::TestTask.new do |t|
   t.warning = false
 end
 
+desc "Run tests with code coverage"
+task :coverage do
+  sh "rcov --exclude vendor/xmpp4r " + Rake::FileList['test/**/*_test.rb'].join(' ')
+end
+desc "Remove coverage products"
+task :clobber_coverage do
+  rm_r 'coverage' rescue nil
+end
+task :clobber => [ :clobber_coverage ]
+
 # Genereates the RDocs
-Rake::RDocTask.new { |rdoc|
+Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_dir = 'doc'
   rdoc.title    = 'Action Messenger -- instant messaging made simple'
   rdoc.options << '--line-numbers' << '--inline-source' << '-A cattr_accessor=object'
@@ -30,7 +40,7 @@ Rake::RDocTask.new { |rdoc|
   rdoc.rdoc_files.include('README', 'COPYING')
   rdoc.rdoc_files.include('lib/action_messenger.rb')
   rdoc.rdoc_files.include('lib/action_messenger/**/*.rb')
-}
+end
 
 # Creates the package
 spec = Gem::Specification.new do |spec|
