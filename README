@@ -26,8 +26,8 @@ The following is the simplest example of a class able to send a message:
 
   class AlarmClock < ActionMessenger::Base
     def wake_up(user)
-      message.to = user
-      message.body = 'Wake up!'
+      recipients user
+      body       'Wake up!'
     end
   end
 

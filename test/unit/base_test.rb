@@ -15,7 +15,7 @@ class BaseTest < Test::Unit::TestCase
     @expected.body = 'You told me to remind you to wake up.  Well?'
     
     # Test creation of the message.
-    assert_equal @expected, SimpleMessenger.create_wakeup('trejkaz@trypticon.org/tests')
+    assert_equal [ @expected ], SimpleMessenger.create_wakeup('trejkaz@trypticon.org/tests')
     
     # Test delivery.
     SimpleMessenger.send_wakeup('trejkaz@trypticon.org/tests')
@@ -43,9 +43,9 @@ class BaseTest < Test::Unit::TestCase
     end
 
     def wakeup(jid)
-      message.to = jid
-      message.subject = 'Wake up!'
-      message.body = 'You told me to remind you to wake up.  Well?'
+      recipients jid
+      subject   'Wake up!'
+      body      'You told me to remind you to wake up.  Well?'
     end
     
     def received(message)

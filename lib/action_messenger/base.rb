@@ -1,7 +1,7 @@
 module ActionMessenger
   class Base
-    # The message being built, to later be sent.
-    attr_accessor :message
+    # The messages being built.
+    attr_reader :messages
     
     # The name of the messenger to use.
     #
@@ -16,8 +16,8 @@ module ActionMessenger
     class << self
       def method_missing(method_symbol, *parameters) #:nodoc:
         case method_symbol.id2name
-        when /^create_([_a-z]\w*)/ then new($1, *parameters).message
-        when /^send_([_a-z]\w*)/   then new($1, *parameters).send_message
+        when /^create_([_a-z]\w*)/ then new($1, *parameters).messages
+        when /^send_([_a-z]\w*)/   then new($1, *parameters).send_messages
         end
       end
       
@@ -46,20 +46,64 @@ module ActionMessenger
       send(method_name, *parameters)
       
       # TODO: Templates, ActionMailer-style.
+
+      recipients.each do |recipient|
+        message = Message.new
+        message.to = recipient
+        message.subject = subject
+        message.body = body
+        messages << message
+      end
     end
     
     # Initialises default settings for this messenger.
     def initialize_defaults
       @messenger = @@default_messenger
-      @message = Message.new
+      @messages = []
+      @recipients = []
+      @subject = nil
+      @body = {}
     end
     
-    # Sends a message
-    def send_message(message = @message, messenger = @messenger)
+    # Sets the recipients of the message being sent.
+    #
+    # If multiple recipients are specified, they will generally be sent as multiple
+    # messages.
+    def recipients(recipients = nil)
+      unless recipients.nil?
+        if recipients.is_a?(Array)
+          @recipients += recipients
+        else
+          @recipients << recipients.to_s
+        end
+      end
+      @recipients
+    end
+    
+    # Sets the subject of the message being built.
+    def subject(subject = nil)
+      unless subject.nil?
+        @subject = subject
+      end
+      @subject
+    end
+    
+    # The body of the message being built.
+    def body(body = nil)
+      unless body.nil?
+        @body = body
+      end
+      @body
+    end
+
+    # Sends multiple messages.
+    def send_messages(messages = @messages, messenger = @messenger)
       unless messenger.nil?
         messenger = Messenger.resolve(messenger)
         unless messenger.nil?
-          messenger.send_message(message)
+          messages.each do |message|
+            messenger.send_message(message)
+          end
         end
       end
     end

@@ -1,4 +1,10 @@
 
+Version 0.2.0:
+* Added support for sending the same message to multiple recipients (implemented by sending
+  that message multiple times.)
+* Changed the API for initialising the message properties, is now more like Action Mailer's
+  version (see the examples.)
+
 Version 0.1.1:
 * Fixed a glitch that caused mock mode to be permanently engaged while inside Rails.
 * Fixed initialisation of the default messenger so that subclasses of ActionMessenger::Base
