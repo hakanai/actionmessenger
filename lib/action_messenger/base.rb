@@ -80,6 +80,12 @@ module ActionMessenger
       @recipients
     end
     
+    # Sets a recipient.  Purely for readability if your app never sends the
+    # same message to multiple recipients.
+    def recipient(recipient)
+      recipients(recipient)
+    end
+
     # Sets the subject of the message being built.
     def subject(subject = nil)
       unless subject.nil?

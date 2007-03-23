@@ -34,10 +34,10 @@ class BaseTest < Test::Unit::TestCase
 
     # Creation
     assert_equal [ expected1, expected2 ],
-                 SimpleMessenger.create_wakeup('user1@trypticon.org', 'user2@trypticon.org')
+                 SimpleMessenger.create_wakeup_multi('user1@trypticon.org', 'user2@trypticon.org')
 
     # Delivery
-    SimpleMessenger.send_wakeup('user1@trypticon.org', 'user2@trypticon.org')
+    SimpleMessenger.send_wakeup_multi('user1@trypticon.org', 'user2@trypticon.org')
     assert_equal [ expected1, expected2],
                  @messenger.deliveries
   end
@@ -62,10 +62,16 @@ class BaseTest < Test::Unit::TestCase
       attr_accessor :received
     end
 
-    def wakeup(*jids)
-      recipients [*jids]
+    def wakeup(jid)
+      recipient jid
       subject   'Wake up!'
       body      'You told me to remind you to wake up.  Well?'
+    end
+
+    def wakeup_multi(*jids)
+      recipients [*jids]
+      subject    'Wake up!'
+      body       'You told me to remind you to wake up.  Well?'
     end
     
     def received(message)
