@@ -4,10 +4,19 @@ Action Messenger is a framework for designing and testing application
 components which both send and receive instant messages.  It was heavily
 based on Action Mailer which does the same thing for email.
 
+== Installation
+
+Installation is as usual: either install from the gem or drop into the 'vendor'
+directory of your Rails application.  Somewhere (probably in
+'config/environment.rb') you will want to add the following:
+
+ require 'action_messenger'
+
 == Configuring the messenger
 
 Configuration of messengers works in a similar fashion to configuration of
-databases in Active Record.
+databases in Active Record.  The default location of the configuration file is
+'config/messengers.yml'.
 
 The simplest configuration is to use a single messenger.
 
