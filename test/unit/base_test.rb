@@ -74,7 +74,7 @@ class BaseTest < Test::Unit::TestCase
       body       'You told me to remind you to wake up.  Well?'
     end
     
-    def received(message)
+    def receive(message)
       SimpleMessenger.received << message
     end
   end
