@@ -16,7 +16,7 @@ directory of your Rails application.  Somewhere (probably in
 
 Configuration of messengers works in a similar fashion to configuration of
 databases in Active Record.  The default location of the configuration file is
-'config/messengers.yml'.
+'config/messenger.yml'.
 
 The simplest configuration is to use a single messenger.
 
@@ -62,6 +62,12 @@ A simple example:
                              :body   => message.body)
     end
   end
+
+This will work as you expect if you are using FastCGI, Mongrel or some other method
+of running the server that doesn't run Ruby once per invocation (notably, CGI will not
+work.)  If you use a cluster of FastCGI or Mongrel instances, you may need to make
+the resources unique for each one.  If this becomes a problem it can be simplified in
+a future version.
 
 == Dependencies
 

@@ -1,4 +1,9 @@
 
+Trunk:
+* Documentation corrections.
+* Changed the name of the method for receiving emails to receive, for consistency with
+  Action Mailer.
+
 Version 0.2.0:
 * Added support for sending the same message to multiple recipients (implemented by sending
   that message multiple times at present.)  Normal #recipient method is present also, and

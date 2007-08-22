@@ -32,7 +32,7 @@ module ActionMessenger
       # When a new message comes in, it will be sent to the instance method called 'received'.
       def receives_messages
         Messenger.resolve(@@default_messenger).add_message_handler do |message|
-          new.received(message)
+          new.receive(message)
         end
       end
     end
