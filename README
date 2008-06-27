@@ -29,6 +29,9 @@ Multiple messengers can be defined in this fashion, however most applications
 should only need one, and by default the messenger named 'default' is the one
 which is used.
 
+The configuration file can contain ERB fragments too, in case more complicated
+decisions need to be made when configuring the messenger.
+
 == Sending messages
 
 The following is the simplest example of a class able to send a message:

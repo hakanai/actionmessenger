@@ -3,6 +3,7 @@ Trunk:
 * Documentation corrections.
 * Changed the name of the method for receiving emails to receive, for consistency with
   Action Mailer.
+* Allowed use of ERB within the config file.
 
 Version 0.2.0:
 * Added support for sending the same message to multiple recipients (implemented by sending

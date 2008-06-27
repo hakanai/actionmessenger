@@ -76,7 +76,8 @@ module ActionMessenger
       unless File.exists?(config_file)
         raise NoConfigFileError, "Config file doesn't exist: #{config_file}"
       end
-      add_config(YAML.load_file(config_file))
+
+      add_config(YAML.load(ERB.new(IO.read(config_file)).result))
     end
     
     # Registers a messenger by name.  This will probably only be used from unit tests.
