@@ -4,6 +4,8 @@ module ActionMessenger
       # Creates a new messenger from its config hash.
       #
       # Hash can contain:
+      #    host:     hostname of the server if different from the Jabber ID.
+      #    port:     port of the server if not the default (5222).
       #    jid:      the Jabber ID of this messenger, with resource if you wish.
       #    password: the password for this messenger.
       def initialize(config_hash = {})
@@ -20,7 +22,11 @@ module ActionMessenger
         #       but also to unit test the sending code.
         @client = Jabber::Client.new(Jabber::JID.new(jid))
       
-        @client.connect
+        # Pass custom host and/or port to connect.
+        args = [ config_hash['host'] ]
+        args << config_hash['port'] if config_hash['port']
+      
+        @client.connect(*args)
         @client.auth(config_hash['password'])
         
         @client.add_message_callback do |jabber_message|
