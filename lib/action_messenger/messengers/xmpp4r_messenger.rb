@@ -4,10 +4,10 @@ module ActionMessenger
       # Creates a new messenger from its config hash.
       #
       # Hash can contain:
-      #    host:     hostname of the server if different from the Jabber ID.
-      #    port:     port of the server if not the default (5222).
       #    jid:      the Jabber ID of this messenger, with resource if you wish.
       #    password: the password for this messenger.
+      #    host:     hostname of the server if different from the server specified in the SRV records for the Jabber ID.
+      #    port:     port of the server if not the default specified in the SRV records (or if SRV records are absent, 5222).
       def initialize(config_hash = {})
         super(config_hash)
         @listeners = []
